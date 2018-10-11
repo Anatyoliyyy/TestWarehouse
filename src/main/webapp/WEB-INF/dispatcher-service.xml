@@ -1,0 +1,33 @@
+<beans xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd ">
+    <bean id="customer" class="ua.testwarehouse.mikhailenko.model.daoImpl.CustomerDAOImpl"/>
+    <bean id="product" class="ua.testwarehouse.mikhailenko.model.daoImpl.ProductDAOImpl"/>
+    <bean id="shipper" class="ua.testwarehouse.mikhailenko.model.daoImpl.ShipperDAOImpl"/>
+    <bean id="warehouse" class="ua.testwarehouse.mikhailenko.model.daoImpl.WarehouseDAOImpl"/>
+    <bean id="viewIncomingDocument" class="ua.testwarehouse.mikhailenko.model.daoImpl.IncomingDocumentDAOImpl"/>
+    <bean id="viewExpenseDocument" class="ua.testwarehouse.mikhailenko.model.daoImpl.ExpenseDocumentDAOImpl"/>
+    <bean name="helloPageController" class="ua.testwarehouse.mikhailenko.controller.HelloPageController"/>
+    <bean name="viewIncomingDocumentController" class="ua.testwarehouse.mikhailenko.controller.ViewIncomingDocumentController" p:shipper-ref="shipper" p:warehouse-ref="warehouse" p:incomingDocument-ref="viewIncomingDocument"/>
+    <bean name="viewExpenseDocumentController" class="ua.testwarehouse.mikhailenko.controller.ViewExpenseDocumentController" p:customer-ref="customer" p:warehouse-ref="warehouse" p:expenseDocument-ref="viewExpenseDocument"/>
+    <bean name="viewRemainderPageController" class="ua.testwarehouse.mikhailenko.controller.ViewRemainderPageController" p:warehouse-ref="warehouse" p:product-ref="product" p:incomingDocument-ref="viewIncomingDocument" p:expenseDocument-ref="viewExpenseDocument" p:remainder-ref="remainderList"/>
+    <bean name="viewCustomerPageController" class="ua.testwarehouse.mikhailenko.controller.ViewCustomerPageController" p:warehouse-ref="warehouse" p:customer-ref="customer" p:expenseDocument-ref="viewExpenseDocument" p:incomingDocument-ref="viewIncomingDocument"/>
+    <bean name="viewShipperPageController" class="ua.testwarehouse.mikhailenko.controller.ViewShipperPageController" p:warehouse-ref="warehouse" p:shipper-ref="shipper" p:incomingDocument-ref="viewIncomingDocument" p:product-ref="product"/>
+    <bean name="remainderList" class="ua.testwarehouse.mikhailenko.service.GetRemainderList" p:expenseDocumentDao-ref="viewExpenseDocument" p:incomingDocumentDao-ref="viewIncomingDocument" p:productDao-ref="product" p:warehouseDao-ref="warehouse"/>
+    <bean id="simpleUrlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="mappings">
+            <props>
+                <prop key="/helloPage.htm">helloPageController</prop>
+                <prop key="/incoming.htm">viewIncomingDocumentController</prop>
+                <prop key="/expense.htm">viewExpenseDocumentController</prop>
+                <prop key="/customer.htm">viewCustomerPageController</prop>
+                <prop key="/addCustomerInfo.htm">viewCustomerPageController</prop>
+                <prop key="/shipper.htm">viewShipperPageController</prop>
+                <prop key="/addShipperInfo.htm">viewShipperPageController</prop>
+                <prop key="/remainder.htm">viewRemainderPageController</prop>
+            </props>
+        </property>
+    </bean>
+</beans>
